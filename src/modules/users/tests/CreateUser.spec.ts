@@ -1,9 +1,9 @@
 import request from "supertest";
 import { Connection, createConnection } from "typeorm";
 
-import { app } from "../../../../../app";
+import { app } from "../../../app";
 
-import { userFixture } from "../../fixtures/UserFixture";
+import { userFixture } from "./fixtures/UserFixture";
 
 const user = userFixture();
 let connection: Connection;
