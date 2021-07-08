@@ -4,10 +4,13 @@ import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
 
-import './database';
+import databaseConnection from './database';
 import './shared/container';
 import { router } from './routes';
 import { AppError } from './shared/errors/AppError';
+
+databaseConnection()
+// .then((connection) => console.log("Database Connected " + connection.name));
 
 const app = express();
 
