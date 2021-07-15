@@ -1,4 +1,3 @@
-import { AppError } from "../../../../shared/errors/AppError";
 import { userFixture } from "../../../users/tests/fixtures/UserFixture";
 
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
@@ -8,6 +7,7 @@ import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUser
 import { AuthenticateUserUseCase } from "../../../users/useCases/authenticateUser/AuthenticateUserUseCase"
 import { CreateStatementUseCase } from "./CreateStatementUseCase";
 import { GetBalanceUseCase } from "../getBalance/GetBalanceUseCase";
+import { CreateStatementError } from "./CreateStatementError";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
@@ -43,7 +43,7 @@ describe("Create Statement Use Case", () => {
         type: OperationType.DEPOSIT,
         description: "Statement Description"
       });
-    }).rejects.toBeInstanceOf(AppError)
+    }).rejects.toBeInstanceOf(CreateStatementError.UserNotFound)
   })
 
   it("should be able to create a statement", async () => {
@@ -91,6 +91,6 @@ describe("Create Statement Use Case", () => {
         type: OperationType.WITHDRAW,
         description: "Statement Description"
       });
-    }).rejects.toBeInstanceOf(AppError)
+    }).rejects.toBeInstanceOf(CreateStatementError.InsufficientFunds)
   });
 })

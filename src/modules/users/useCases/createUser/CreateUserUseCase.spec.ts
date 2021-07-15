@@ -1,6 +1,6 @@
-import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { userFixture } from "../../tests/fixtures/UserFixture";
+import { CreateUserError } from "./CreateUserError";
 import { CreateUserUseCase } from "./CreateUserUseCase"
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
@@ -25,6 +25,6 @@ describe("Create User Use Case", () => {
     expect(async () => {
       await createUserUseCase.execute(user);
       await createUserUseCase.execute(user);
-    }).rejects.toBeInstanceOf(AppError)
+    }).rejects.toBeInstanceOf(CreateUserError)
   })
 })

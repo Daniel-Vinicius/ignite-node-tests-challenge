@@ -1,8 +1,8 @@
-import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { userFixture } from "../../tests/fixtures/UserFixture";
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase"
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase"
+import { IncorrectEmailOrPasswordError } from "./IncorrectEmailOrPasswordError";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let authenticateUserUseCase: AuthenticateUserUseCase;
@@ -31,7 +31,7 @@ describe("Authenticate User Use Case", () => {
   it("should not be able to authenticate an non-existent user", async () => {
     expect(async () => {
       await authenticateUserUseCase.execute(user);
-    }).rejects.toBeInstanceOf(AppError);
+    }).rejects.toBeInstanceOf(IncorrectEmailOrPasswordError);
   });
 
   it("should not be able to authenticate with incorrect password", async () => {
@@ -42,7 +42,7 @@ describe("Authenticate User Use Case", () => {
         email: user.email,
         password: "incorrectPassword",
       });
-    }).rejects.toBeInstanceOf(AppError);
+    }).rejects.toBeInstanceOf(IncorrectEmailOrPasswordError);
   });
 
 })

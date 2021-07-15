@@ -1,4 +1,3 @@
-import { AppError } from "../../../../shared/errors/AppError";
 import { userFixture } from "../../../users/tests/fixtures/UserFixture";
 
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
@@ -8,6 +7,7 @@ import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUser
 import { AuthenticateUserUseCase } from "../../../users/useCases/authenticateUser/AuthenticateUserUseCase"
 import { GetStatementOperationUseCase } from "./GetStatementOperationUseCase";
 import { CreateStatementUseCase } from "../createStatement/CreateStatementUseCase";
+import { GetStatementOperationError } from "./GetStatementOperationError";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
@@ -41,19 +41,19 @@ describe("Get Statement Use Case", () => {
         user_id: "user_id",
         statement_id: "statement_id"
       });
-    }).rejects.toBeInstanceOf(AppError)
+    }).rejects.toBeInstanceOf(GetStatementOperationError.UserNotFound)
   })
 
   it("should not be able to show a non-existent statement", async () => {
-    expect(async () => {
-      await createUserUseCase.execute(user);
-      const userAuthenticated = await authenticateUserUseCase.execute(user);
+    await createUserUseCase.execute(user);
+    const userAuthenticated = await authenticateUserUseCase.execute({ email: user.email, password: user.password });
 
+    expect(async () => {
       await getStatementOperationUseCase.execute({
         user_id: userAuthenticated.user.id as string,
         statement_id: "statement_id"
       });
-    }).rejects.toBeInstanceOf(AppError)
+    }).rejects.toBeInstanceOf(GetStatementOperationError.StatementNotFound)
   })
 
   it("should be able to show a statement", async () => {

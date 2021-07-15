@@ -1,9 +1,9 @@
-import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { userFixture } from "../../tests/fixtures/UserFixture";
 import { ShowUserProfileUseCase } from "./ShowUserProfileUseCase"
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase"
 import { AuthenticateUserUseCase } from "../authenticateUser/AuthenticateUserUseCase"
+import { ShowUserProfileError } from "./ShowUserProfileError";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let showUserProfileUseCase: ShowUserProfileUseCase;
@@ -35,6 +35,6 @@ describe("Show User Profile Use Case", () => {
   it("should not be able to show a profile of a non-existent user", async () => {
     expect(async () => {
       await showUserProfileUseCase.execute("id");
-    }).rejects.toBeInstanceOf(AppError)
+    }).rejects.toBeInstanceOf(ShowUserProfileError)
   })
 })

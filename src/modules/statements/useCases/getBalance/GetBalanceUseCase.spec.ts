@@ -1,4 +1,3 @@
-import { AppError } from "../../../../shared/errors/AppError";
 import { userFixture } from "../../../users/tests/fixtures/UserFixture";
 
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
@@ -7,6 +6,7 @@ import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/I
 import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUserUseCase"
 import { AuthenticateUserUseCase } from "../../../users/useCases/authenticateUser/AuthenticateUserUseCase"
 import { GetBalanceUseCase } from "./GetBalanceUseCase";
+import { GetBalanceError } from "./GetBalanceError";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
@@ -44,6 +44,6 @@ describe("Get Balance Use Case", () => {
       await getBalanceUseCase.execute({
         user_id: "id"
       });
-    }).rejects.toBeInstanceOf(AppError)
+    }).rejects.toBeInstanceOf(GetBalanceError)
   })
 })
