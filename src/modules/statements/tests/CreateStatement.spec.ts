@@ -61,7 +61,7 @@ describe("Create Statement Route", () => {
     expect(balance.body.statement.length).toEqual(2);
   });
 
-  it("it must not be possible to make a withdrawal if you do not have sufficient funds", async () => {
+  it("it must not be possible to make a withdrawal or transfer if you do not have sufficient funds", async () => {
     await request(app).post("/api/v1/statements/withdraw").set(headers).send({
       description: "Test",
       amount: 60
@@ -70,5 +70,30 @@ describe("Create Statement Route", () => {
     const balance = await request(app).get("/api/v1/statements/balance").set(headers).expect(200)
 
     expect(balance.body.statement.length).toEqual(2);
+  });
+
+  it("should be able to make a transfer", async () => {
+    const newUser = userFixture();
+    await request(app).post("/api/v1/users").send(newUser).expect(201);
+    const newUserAuthenticated = await request(app).post("/api/v1/sessions").send(newUser).expect(200);
+
+    const transfer = await request(app).post("/api/v1/statements/transfer").set(headers).send({
+      description: "Test",
+      amount: 10,
+      sender_id: newUserAuthenticated.body.user.id
+    }).expect(201);
+
+
+    const balance = await request(app).get("/api/v1/statements/balance").set(headers).expect(200)
+    const balanceNewUser = await request(app).get("/api/v1/statements/balance").set({
+      Authorization: `Bearer ${newUserAuthenticated.body.token}`,
+    }).expect(200)
+
+    expect(transfer.body.type).toEqual("transfer")
+    expect(balance.body.statement.length).toEqual(3);
+    expect(balance.body.balance).toEqual(20);
+
+    expect(balanceNewUser.body.statement.length).toEqual(1);
+    expect(balanceNewUser.body.balance).toEqual(10);
   });
 })
