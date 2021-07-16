@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 
 import { IUsersRepository } from "../../../users/repositories/IUsersRepository";
+import { ICreateStatementDTO } from "../../dtos/ICreateStatementDTO";
 import { IStatementsRepository } from "../../repositories/IStatementsRepository";
 import { CreateStatementError } from "./CreateStatementError";
-import { ICreateStatementDTO } from "./ICreateStatementDTO";
 
 @injectable()
 export class CreateStatementUseCase {
