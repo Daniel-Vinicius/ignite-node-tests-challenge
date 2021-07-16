@@ -12,4 +12,10 @@ export namespace CreateStatementError {
       super('Insufficient funds', 400);
     }
   }
+
+  export class TransferNeedsSenderId extends AppError {
+    constructor() {
+      super('To make a transfer, is necessary pass the sender_id field.', 400);
+    }
+  }
 }
